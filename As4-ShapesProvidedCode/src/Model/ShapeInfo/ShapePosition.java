@@ -15,6 +15,10 @@ public abstract class ShapePosition {
         return left;
     }
 
+    public void setTop() { this.top = top; }
+
+    public void setLeft() { this.left = left; }
+
     public void placeBox(Canvas canvas) {}
 
 }
