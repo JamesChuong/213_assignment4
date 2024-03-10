@@ -23,7 +23,8 @@ public class BoxShape implements DrawableShape {
     }
     @Override
     public void draw(Canvas canvas) {
-
+        color.placeColor(canvas, position.getLeft(),position.getTop(), size.getWidth(), size.getHeight());
+        border.drawBorder(canvas, position.getLeft(), position.getTop(), size.getWidth(), size.getHeight());
     }
 
 }

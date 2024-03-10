@@ -20,6 +20,11 @@ public class BoxBorder implements ShapeBorder {
                 setCharBorder(canvas, startX, startY, width, height);
                 break;
             case "sequence":
+                setSequenceBorder(canvas, startX, startY, width, height);
+                break;
+            case "ascii line":
+
+                break;
 
         }
     }
@@ -41,20 +46,24 @@ public class BoxBorder implements ShapeBorder {
         }
     }
 
-    private void setSequenceBorderLine(Canvas canvas, int startX, int startY, int length, int sequence, boolean isHorizontal){
-        for(int i = 0; i < length; i++){
-            sequence++;
-            if(isHorizontal){
-                canvas.setCellText(startX+i, startY, Character.forDigit(sequence%5+1, 10));
-            } else {
-                canvas.setCellText(startX, startY+i, Character.forDigit(sequence%5+1, 10));
-            }
-        }
-    }
-
     private void setSequenceBorder(Canvas canvas, int startX, int startY, int width, int height){
         int borderSequence = 0;
-
+        for(int i = 0; i < width; i++){
+            borderSequence++;
+            canvas.setCellText(startX+i, startY, Character.forDigit(borderSequence%5+1, 10));
+        }
+        for(int i = 1; i <= height-1; i++){
+            borderSequence++;
+            canvas.setCellText(startX+width, startY-i, Character.forDigit(borderSequence%5+1, 10));
+        }
+        for(int i = width-1; i >= 0; i--){
+            borderSequence++;
+            canvas.setCellText(startX+width-i-1, startY-height, Character.forDigit(borderSequence%5+1, 10));
+        }
+        for(int i = 1; i < height-2; i++){
+            borderSequence++;
+            canvas.setCellText(startX, startY-height+i+1, Character.forDigit(borderSequence%5+1, 10));
+        }
     }
 
     @Override
