@@ -23,17 +23,25 @@ public class ShapeList implements Iterable<DrawableShape>{
         return shapes.iterator();
     }
 
-    public void readFromJSON(File JSONFile){
+    public static ShapeList readFromJSON(File JSONFile){
+        ShapeList newShapeList = new ShapeList();
         try{
             JsonElement JSONfile = JsonParser.parseReader( new FileReader(JSONFile) );
             JsonObject currentObject = JSONfile.getAsJsonObject();
             JsonArray jsonlistOfShapes = currentObject.getAsJsonArray("shapes");
             for (JsonElement currentShape: jsonlistOfShapes){
                 JsonObject jsonShapeObject = currentShape.getAsJsonObject();
-                shapes.add( new BoxShape() );
+                newShapeList.shapes.add( new BoxShape(jsonShapeObject.get("top").getAsInt(), jsonShapeObject.get("left").getAsInt()
+                        , jsonShapeObject.get("width").getAsInt(),jsonShapeObject.get("height").getAsInt()
+                        , jsonShapeObject.get("background").getAsString()
+                        , jsonShapeObject.get("backgroundColor").getAsString()
+                        , jsonShapeObject.get("line").getAsString(), jsonShapeObject.get("lineChar").getAsCharacter()
+                        , jsonShapeObject.get("fill").getAsString(), jsonShapeObject.get("fillText").getAsString())
+                );
             }
         } catch (FileNotFoundException e){
             e.printStackTrace();
         }
+        return newShapeList;
     }
 }

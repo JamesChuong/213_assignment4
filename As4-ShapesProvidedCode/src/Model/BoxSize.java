@@ -1,11 +1,12 @@
 package Model;
 
-import Model.ShapeInfo.ShapeSize;
-
-public class BoxSize extends ShapeSize {
+public class BoxSize {
 
     private int height;
     private int width;
 
-
+    public BoxSize(int height, int width){
+        this.height = height;
+        this.width = width;
+    }
 }

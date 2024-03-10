@@ -4,7 +4,7 @@ import ca.cmpt213.as4.UI.Canvas;
 
 public interface ShapeBorder {
 
-    void drawBorder(Canvas canvas, int top, int left, int height, int width);
+    void drawBorder(Canvas canvas, int startX, int startY, int width, int height);
 
     void setBorderStyle(String line, char lineChar);
 

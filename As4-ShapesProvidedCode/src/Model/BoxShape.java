@@ -3,16 +3,24 @@ package Model;
 import Model.ShapeInfo.*;
 import ca.cmpt213.as4.UI.Canvas;
 import ca.cmpt213.as4.UI.DrawableShape;
+import java.awt.*;
 
 public class BoxShape implements DrawableShape {
 
     private ShapeBorder border;
     private ShapeColor color;
     private ShapeText text;
-    private ShapeSize size;
-    private ShapePosition position;
+    private BoxSize size;
+    private BoxPosition position;
 
-
+    public BoxShape(int top, int left, int width, int height, String background, 
+                    String backgroundColor, String line, char lineChar, String fill, String fillText){
+        border = new BoxBorder(line, lineChar);
+        color = new BoxColor(background, backgroundColor);
+        text = new BoxText(fill, fillText);
+        size = new BoxSize(height, width);
+        position = new BoxPosition(top, left);
+    }
     @Override
     public void draw(Canvas canvas) {
 

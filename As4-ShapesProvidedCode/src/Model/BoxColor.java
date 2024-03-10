@@ -10,6 +10,11 @@ public class BoxColor implements ShapeColor {
     private String background;
     private Color backgroundColor;
 
+    public BoxColor(String background, String backgroundColor){
+        this.background = background;
+        this.backgroundColor = Color.getColor(backgroundColor);
+    }
+
     @Override
     public void placeColor(Canvas canvas, int startX, int startY, int width, int height) {
         if(background.equals("solid")){

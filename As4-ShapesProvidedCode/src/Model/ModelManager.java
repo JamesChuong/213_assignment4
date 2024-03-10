@@ -15,13 +15,13 @@ import java.util.List;
 
 public class ModelManager implements ShapeModel {
 
-    private ShapeList listOfBoxes = new ShapeList();
+    private ShapeList listOfBoxes;
 
     public ModelManager(){}
 
     @Override
     public void populateFromJSON(File jsonFile) {
-
+        listOfBoxes = ShapeList.readFromJSON(jsonFile);
     }
 
     @Override
