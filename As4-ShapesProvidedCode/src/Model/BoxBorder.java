@@ -87,10 +87,4 @@ public class BoxBorder implements ShapeBorder {
         }
     }
 
-    @Override
-    public void setBorderStyle(String line, char lineChar) {
-        this.line = line;
-        this.lineChar = lineChar;
-    }
-
 }

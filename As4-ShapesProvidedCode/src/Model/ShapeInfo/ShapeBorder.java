@@ -6,6 +6,5 @@ public interface ShapeBorder {
 
     void drawBorder(Canvas canvas, int startX, int startY, int width, int height);
 
-    void setBorderStyle(String line, char lineChar);
 
 }

@@ -1,5 +1,8 @@
 package Model.ShapeInfo;
 
+import Model.BoxBorder;
+import Model.BoxColor;
+import Model.BoxText;
 import ca.cmpt213.as4.UI.DrawableShape;
 
 import java.io.File;
@@ -11,5 +14,5 @@ public interface ShapeList {
 
     Iterator<? extends DrawableShape> getShapeIterator();
 
-    void ChangeShapeAttributes();
+    void ChangeShapeAttributes(ShapeBorder newBorder, ShapeColor newColor, ShapeText newText);
 }

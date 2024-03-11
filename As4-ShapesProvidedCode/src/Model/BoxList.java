@@ -1,6 +1,9 @@
 package Model;
 
+import Model.ShapeInfo.ShapeBorder;
+import Model.ShapeInfo.ShapeColor;
 import Model.ShapeInfo.ShapeList;
+import Model.ShapeInfo.ShapeText;
 import ca.cmpt213.as4.UI.DrawableShape;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -21,6 +24,15 @@ public class BoxList implements ShapeList {
     @Override
     public Iterator<? extends DrawableShape> getShapeIterator() {
         return shapes.iterator();
+    }
+
+    @Override
+    public void ChangeShapeAttributes(ShapeBorder newBorder, ShapeColor newColor, ShapeText newText) {
+        for(BoxShape CurrentBox: shapes){
+            CurrentBox.changeBorderStyle(newBorder);
+            CurrentBox.changeColor(newColor);
+            CurrentBox.changeText(newText);
+        }
     }
 
     //Replace current list of shapes with those in a JSON file
@@ -47,8 +59,5 @@ public class BoxList implements ShapeList {
         this.shapes = newShapeList;
     }
 
-    @Override
-    public void ChangeShapeAttributes() {
 
-    }
 }
