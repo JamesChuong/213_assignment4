@@ -25,6 +25,7 @@ public class BoxShape implements DrawableShape {
     public void draw(Canvas canvas) {
         color.placeColor(canvas, position.getLeft(),position.getTop(), size.getWidth(), size.getHeight());
         border.drawBorder(canvas, position.getLeft(), position.getTop(), size.getWidth(), size.getHeight());
+        text.placeText(canvas, position.getTop(), position.getLeft(), size.getHeight(), size.getWidth());
     }
 
 }

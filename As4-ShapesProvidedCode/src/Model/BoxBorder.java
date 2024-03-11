@@ -23,17 +23,18 @@ public class BoxBorder implements ShapeBorder {
                 setSequenceBorder(canvas, startX, startY, width, height);
                 break;
             case "ascii line":
-
+                setAsciiBorder(canvas, startX, startY, width, height);
                 break;
 
         }
     }
 
     private void setCharBorder(Canvas canvas, int startX, int startY, int width, int height){
-        setCharBorderLine(canvas, startX, startY, width, lineChar, true);
-        setCharBorderLine(canvas, startX + width, startY-height, height, lineChar, false);
-        setCharBorderLine(canvas, startX, startY-height, width, lineChar, true);
-        setCharBorderLine(canvas, startX, startY-height, height, lineChar, false);
+        boolean drawHorizontal = true;
+        setCharBorderLine(canvas, startX, startY, width, lineChar, drawHorizontal);
+        setCharBorderLine(canvas, startX + width, startY-height, height, lineChar, !drawHorizontal);
+        setCharBorderLine(canvas, startX, startY-height, width, lineChar, drawHorizontal);
+        setCharBorderLine(canvas, startX, startY-height, height, lineChar, !drawHorizontal);
     }
 
     private void setCharBorderLine(Canvas canvas, int startX, int startY, int length, char border, boolean isHorizontal){
@@ -44,6 +45,21 @@ public class BoxBorder implements ShapeBorder {
                 canvas.setCellText(startX, startY+i, border);
             }
         }
+    }
+
+    private void setAsciiBorder(Canvas canvas, int startX, int startY, int width, int height){
+        boolean drawHorizontal = true;
+        if(height == 1){
+            setCharBorderLine(canvas, startX, startY, width, '■', drawHorizontal);
+        } else if (width == 1){
+            setCharBorderLine(canvas, startX, startY, height, '■', !drawHorizontal);
+        }
+        canvas.setCellText(startX, startY, '╔');
+        canvas.setCellText(startX, startY-height, '╚');
+        canvas.setCellText(startX+width, startY, '╗');
+        canvas.setCellText(startX+width, startY-height, '╝');
+        setCharBorderLine(canvas, startX+1, startY, width-2, '═', drawHorizontal);
+
     }
 
     private void setSequenceBorder(Canvas canvas, int startX, int startY, int width, int height){

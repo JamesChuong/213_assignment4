@@ -17,15 +17,28 @@ public class BoxText implements ShapeText {
     public void placeText(Canvas canvas, int top, int left, int verticalSpace, int horizontalSpace){
         switch (fill){
             case "wrapper":
-                placeWrapperText(canvas, top, left, verticalSpace, horizontalSpace);
+                placeWrapperText(canvas, left, top, verticalSpace, horizontalSpace);
                 break;
             case "solid":
+                placeSolidText(canvas, left, top, verticalSpace, horizontalSpace);
+                break;
+            default: //////////////////////////////////////
+                throw new RuntimeException("ERROR: Invalid fill option in JSON file");
         }
     }
 
-    private void placeWrapperText(Canvas canvas, int top, int left, int verticalSpace, int horizontalSpace) {
+    private void placeSolidText(Canvas canvas, int left, int top, int verticalSpace, int horizontalSpace){
+        char fillCharacter = fillText.charAt(0);    //First character of the string
+        for(int currentLine = top; currentLine >= top-verticalSpace; currentLine--){
+            for(int i = 0; i < horizontalSpace; i++){
+                canvas.setCellText(left+i, currentLine, fillCharacter);
+            }
+        }
+    }
+
+    private void placeWrapperText(Canvas canvas, int left, int top, int verticalSpace, int horizontalSpace) {
         String currentText = fillText;
-        for(int currentLine = 0; currentLine < verticalSpace; currentLine++){
+        for(int currentLine = top; currentLine >= top-verticalSpace; currentLine--){
             if(currentText.length() <= horizontalSpace){
                 alignAndPlaceText(canvas, currentLine, left, horizontalSpace, currentText);
                 break;
