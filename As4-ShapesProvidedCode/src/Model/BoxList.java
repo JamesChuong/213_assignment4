@@ -1,5 +1,6 @@
 package Model;
 
+import Model.ShapeInfo.ShapeList;
 import ca.cmpt213.as4.UI.DrawableShape;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -13,24 +14,26 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class ShapeList implements Iterable<DrawableShape>{
+public class BoxList implements ShapeList {
 
-    private List<DrawableShape> shapes = new ArrayList<>();
+    private List<BoxShape> shapes = new ArrayList<>();
 
     @Override
-    public Iterator<DrawableShape> iterator() {
+    public Iterator<? extends DrawableShape> getShapeIterator() {
         return shapes.iterator();
     }
 
-    public static ShapeList readFromJSON(File JSONFile){
-        ShapeList newShapeList = new ShapeList();
+    //Replace current list of shapes with those in a JSON file
+    @Override
+    public void readFromJSON(File JSONFile){
+        List<BoxShape> newShapeList = new ArrayList<>();
         try{
             JsonElement JSONfile = JsonParser.parseReader( new FileReader(JSONFile) );
             JsonObject currentObject = JSONfile.getAsJsonObject();
             JsonArray jsonlistOfShapes = currentObject.getAsJsonArray("shapes");
             for (JsonElement currentShape: jsonlistOfShapes){
                 JsonObject jsonShapeObject = currentShape.getAsJsonObject();
-                newShapeList.shapes.add( new BoxShape(jsonShapeObject.get("top").getAsInt()
+                newShapeList.add( new Model.BoxShape(jsonShapeObject.get("top").getAsInt()
                         , jsonShapeObject.get("left").getAsInt(), jsonShapeObject.get("width").getAsInt()
                         , jsonShapeObject.get("height").getAsInt(), jsonShapeObject.get("background").getAsString()
                         , jsonShapeObject.get("backgroundColor").getAsString()
@@ -41,6 +44,11 @@ public class ShapeList implements Iterable<DrawableShape>{
         } catch (FileNotFoundException e){
             e.printStackTrace();
         }
-        return newShapeList;
+        this.shapes = newShapeList;
+    }
+
+    @Override
+    public void ChangeShapeAttributes() {
+
     }
 }

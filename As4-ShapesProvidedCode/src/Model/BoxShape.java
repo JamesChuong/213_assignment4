@@ -3,7 +3,6 @@ package Model;
 import Model.ShapeInfo.*;
 import ca.cmpt213.as4.UI.Canvas;
 import ca.cmpt213.as4.UI.DrawableShape;
-import java.awt.*;
 
 public class BoxShape implements DrawableShape {
 
@@ -26,6 +25,18 @@ public class BoxShape implements DrawableShape {
         color.placeColor(canvas, position.getLeft(),position.getTop(), size.getWidth(), size.getHeight());
         border.drawBorder(canvas, position.getLeft(), position.getTop(), size.getWidth(), size.getHeight());
         text.placeText(canvas, position.getTop(), position.getLeft(), size.getHeight(), size.getWidth());
+    }
+
+    public void changeBorderStyle(ShapeBorder newBorder){
+        this.border = newBorder;
+    }
+
+    public void changeColor(ShapeColor newColor){
+        this.color = newColor;
+    }
+
+    public void changeText(ShapeText newText){
+        this.text = newText;
     }
 
 }

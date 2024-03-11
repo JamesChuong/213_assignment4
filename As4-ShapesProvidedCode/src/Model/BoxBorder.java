@@ -25,7 +25,8 @@ public class BoxBorder implements ShapeBorder {
             case "ascii line":
                 setAsciiBorder(canvas, startX, startY, width, height);
                 break;
-
+            default:
+                throw new RuntimeException("ERROR: Invalid line value in JSON");
         }
     }
 
@@ -37,15 +38,7 @@ public class BoxBorder implements ShapeBorder {
         setCharBorderLine(canvas, startX, startY-height, height, lineChar, !drawHorizontal);
     }
 
-    private void setCharBorderLine(Canvas canvas, int startX, int startY, int length, char border, boolean isHorizontal){
-        for(int i = 0; i < length; i++){
-            if(isHorizontal){
-                canvas.setCellText(startX+i, startY, border);
-            } else {
-                canvas.setCellText(startX, startY+i, border);
-            }
-        }
-    }
+
 
     private void setAsciiBorder(Canvas canvas, int startX, int startY, int width, int height){
         boolean drawHorizontal = true;
@@ -59,7 +52,19 @@ public class BoxBorder implements ShapeBorder {
         canvas.setCellText(startX+width, startY, '╗');
         canvas.setCellText(startX+width, startY-height, '╝');
         setCharBorderLine(canvas, startX+1, startY, width-2, '═', drawHorizontal);
+        setCharBorderLine(canvas, startX+width, startY-height+1, height-2, '║', !drawHorizontal);
+        setCharBorderLine(canvas, startX+1, startY-height, width-2, '═', drawHorizontal);
+        setCharBorderLine(canvas, startX, startY-height+1, height-2, '║', !drawHorizontal);
+    }
 
+    private void setCharBorderLine(Canvas canvas, int startX, int startY, int length, char border, boolean isHorizontal){
+        for(int i = 0; i < length; i++){
+            if(isHorizontal){
+                canvas.setCellText(startX+i, startY, border);
+            } else {
+                canvas.setCellText(startX, startY+i, border);
+            }
+        }
     }
 
     private void setSequenceBorder(Canvas canvas, int startX, int startY, int width, int height){
