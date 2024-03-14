@@ -1,5 +1,6 @@
 package ca.cmpt213.as4;
 
+import Model.ModelManager;
 import ca.cmpt213.as4.UI.GUI;
 import ca.cmpt213.as4.trivial_model.TrivialShapeModel;
 
@@ -9,7 +10,7 @@ import ca.cmpt213.as4.trivial_model.TrivialShapeModel;
 public class Main {
     public static void main(String[] args) {
         // Instantiate model
-        ShapeModel model = new TrivialShapeModel();
+        ShapeModel model = new ModelManager();
 
         // Instantiate GUI (with DI)
         GUI gui = new GUI(model);

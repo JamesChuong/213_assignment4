@@ -43,21 +43,27 @@ public class BoxList implements ShapeList {
             JsonElement JSONfile = JsonParser.parseReader( new FileReader(JSONFile) );
             JsonObject currentObject = JSONfile.getAsJsonObject();
             JsonArray jsonlistOfShapes = currentObject.getAsJsonArray("shapes");
+            char lineChar;
             for (JsonElement currentShape: jsonlistOfShapes){
                 JsonObject jsonShapeObject = currentShape.getAsJsonObject();
+                if(jsonShapeObject.has("lineChar")){
+                    lineChar = jsonShapeObject.get("lineChar").getAsCharacter();
+                } else {
+                    lineChar = ' ';
+                }
                 newShapeList.add( new Model.BoxShape(jsonShapeObject.get("top").getAsInt()
-                        , jsonShapeObject.get("left").getAsInt(), jsonShapeObject.get("width").getAsInt()
-                        , jsonShapeObject.get("height").getAsInt(), jsonShapeObject.get("background").getAsString()
-                        , jsonShapeObject.get("backgroundColor").getAsString()
-                        , jsonShapeObject.get("line").getAsString(), jsonShapeObject.get("lineChar").getAsCharacter()
-                        , jsonShapeObject.get("fill").getAsString(), jsonShapeObject.get("fillText").getAsString())
+                            , jsonShapeObject.get("left").getAsInt(), jsonShapeObject.get("width").getAsInt()
+                            , jsonShapeObject.get("height").getAsInt(), jsonShapeObject.get("background").getAsString()
+                            , jsonShapeObject.get("backgroundColor").getAsString()
+                            , jsonShapeObject.get("line").getAsString(), lineChar
+                            , jsonShapeObject.get("fill").getAsString(), jsonShapeObject.get("fillText").getAsString())
                 );
+
+
             }
         } catch (FileNotFoundException e){
             e.printStackTrace();
         }
         this.shapes = newShapeList;
     }
-
-
 }

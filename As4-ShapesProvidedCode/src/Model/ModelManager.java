@@ -10,6 +10,7 @@ import ca.cmpt213.as4.UI.DrawableShape;
 
 import java.awt.*;
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.Iterator;
 
 public class ModelManager implements ShapeModel {
@@ -41,19 +42,27 @@ public class ModelManager implements ShapeModel {
             }
             @Override
             public void drawBorder(Canvas canvas, int startX, int startY, int width, int height) {
-                setCharBorderLine(canvas, startX, startY, width, true);
-                setCharBorderLine(canvas, startX+width,startY-height, height, false);
-                setCharBorderLine(canvas, startX, startY-height, width, true);
-                setCharBorderLine(canvas, startX, startY-height, height, false);
+                boolean drawHorizontal = true;
+                setCharBorderLine(canvas, startX, startY, width, drawHorizontal);
+                setCharBorderLine(canvas, startX + width-1, startY, height, !drawHorizontal);
+                setCharBorderLine(canvas, startX, startY+height-1, width, drawHorizontal);
+                setCharBorderLine(canvas, startX, startY, height, !drawHorizontal);
             }
         };
     }
 
     private ShapeColor getRedactedColor(){
         return (canvas, startX, startY, width, height) -> {
+            Color redactedColor;
+            try {
+                Field field = Class.forName("java.awt.Color").getField("lightGray");
+                redactedColor = (Color)field.get(null);
+            } catch (Exception e) {
+                redactedColor = null; // Not defined
+            }
             for(int i = 0; i < width; i++){
                 for(int k = 0; k < height; k++){
-                    canvas.setCellColor(startX+i, startY+k, Color.getColor("light gray"));
+                    canvas.setCellColor(startX+i, startY+k, redactedColor);
                 }
             }
         };
@@ -61,7 +70,7 @@ public class ModelManager implements ShapeModel {
 
     private ShapeText getRedactedText(){
         return (canvas, top, left, verticalSpace, horizontalSpace) -> {
-            for(int currentLine = top; currentLine >= top-verticalSpace; currentLine--){
+            for(int currentLine = top; currentLine < top+verticalSpace; currentLine++){
                 for(int i = 0; i < horizontalSpace; i++){
                     canvas.setCellText(left+i, currentLine, 'X');
                 }

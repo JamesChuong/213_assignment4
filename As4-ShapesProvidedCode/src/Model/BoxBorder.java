@@ -33,12 +33,10 @@ public class BoxBorder implements ShapeBorder {
     private void setCharBorder(Canvas canvas, int startX, int startY, int width, int height){
         boolean drawHorizontal = true;
         setCharBorderLine(canvas, startX, startY, width, lineChar, drawHorizontal);
-        setCharBorderLine(canvas, startX + width, startY-height, height, lineChar, !drawHorizontal);
-        setCharBorderLine(canvas, startX, startY-height, width, lineChar, drawHorizontal);
-        setCharBorderLine(canvas, startX, startY-height, height, lineChar, !drawHorizontal);
+        setCharBorderLine(canvas, startX + width-1, startY, height, lineChar, !drawHorizontal);
+        setCharBorderLine(canvas, startX, startY+height-1, width, lineChar, drawHorizontal);
+        setCharBorderLine(canvas, startX, startY, height, lineChar, !drawHorizontal);
     }
-
-
 
     private void setAsciiBorder(Canvas canvas, int startX, int startY, int width, int height){
         boolean drawHorizontal = true;
@@ -46,15 +44,16 @@ public class BoxBorder implements ShapeBorder {
             setCharBorderLine(canvas, startX, startY, width, '■', drawHorizontal);
         } else if (width == 1){
             setCharBorderLine(canvas, startX, startY, height, '■', !drawHorizontal);
+        } else {
+            canvas.setCellText(startX, startY, '╔');
+            canvas.setCellText(startX, startY+height-1, '╚');
+            canvas.setCellText(startX+width-1, startY, '╗');
+            canvas.setCellText(startX+width-1, startY+height-1, '╝');
+            setCharBorderLine(canvas, startX+1, startY, width-2, '═', drawHorizontal);
+            setCharBorderLine(canvas, startX+width-1, startY+1, height-2, '║', !drawHorizontal);
+            setCharBorderLine(canvas, startX+1, startY+height-1, width-2, '═', drawHorizontal);
+            setCharBorderLine(canvas, startX, startY+1, height-2, '║', !drawHorizontal);
         }
-        canvas.setCellText(startX, startY, '╔');
-        canvas.setCellText(startX, startY-height, '╚');
-        canvas.setCellText(startX+width, startY, '╗');
-        canvas.setCellText(startX+width, startY-height, '╝');
-        setCharBorderLine(canvas, startX+1, startY, width-2, '═', drawHorizontal);
-        setCharBorderLine(canvas, startX+width, startY-height+1, height-2, '║', !drawHorizontal);
-        setCharBorderLine(canvas, startX+1, startY-height, width-2, '═', drawHorizontal);
-        setCharBorderLine(canvas, startX, startY-height+1, height-2, '║', !drawHorizontal);
     }
 
     private void setCharBorderLine(Canvas canvas, int startX, int startY, int length, char border, boolean isHorizontal){
@@ -70,20 +69,20 @@ public class BoxBorder implements ShapeBorder {
     private void setSequenceBorder(Canvas canvas, int startX, int startY, int width, int height){
         int borderSequence = 0;
         for(int i = 0; i < width; i++){
-            borderSequence++;
             canvas.setCellText(startX+i, startY, Character.forDigit(borderSequence%5+1, 10));
+            borderSequence++;
         }
         for(int i = 1; i <= height-1; i++){
+            canvas.setCellText(startX+width-1, startY+i, Character.forDigit(borderSequence%5+1, 10));
             borderSequence++;
-            canvas.setCellText(startX+width, startY-i, Character.forDigit(borderSequence%5+1, 10));
         }
-        for(int i = width-1; i >= 0; i--){
+        for(int i = 1; i < width; i++){
+            canvas.setCellText(startX+width-i-1, startY+height-1, Character.forDigit(borderSequence%5+1, 10));
             borderSequence++;
-            canvas.setCellText(startX+width-i-1, startY-height, Character.forDigit(borderSequence%5+1, 10));
         }
-        for(int i = 1; i < height-2; i++){
+        for(int i = 1; i < height-1; i++){
+            canvas.setCellText(startX, startY+height-i-1, Character.forDigit(borderSequence%5+1, 10));
             borderSequence++;
-            canvas.setCellText(startX, startY-height+i+1, Character.forDigit(borderSequence%5+1, 10));
         }
     }
 

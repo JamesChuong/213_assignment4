@@ -35,7 +35,6 @@ public class TrivialShapeModel implements ShapeModel {
     private Color color;
     private String text;
 
-
     private List<DrawableShape> shapes = new ArrayList<>();
 
     // Load objects from file
