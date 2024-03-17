@@ -1,5 +1,6 @@
 package ca.a4FortDefense.Model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -20,16 +21,33 @@ public class GameManager {
     private final List<EnemyFort> opponentList;
     private int totalOpponentScore = 0;
     private int playerScore = 0;
+    private int gameNumber = 0;
+
+    //The current round that is being played
+    private int currentRound = 0;
+
+    //The score each opponent has collected for each round
+    private List<int[]> opponentScoresPerRound = new ArrayList<>();
 
     private void updateTotalScores() {
-        for (EnemyFort opponent : opponentList) {
-            totalOpponentScore += opponent.getScore();
+        int numOpponents = opponentList.size();
+        int[] endOfRoundScores = new int[numOpponents];
+        for (int i = 0; i < numOpponents; i++) {
+            EnemyFort currentOpponent = opponentList.get(i);
+            totalOpponentScore += currentOpponent.getScore();
+            endOfRoundScores[i] = currentOpponent.getScore();
         }
+        opponentScoresPerRound.add(endOfRoundScores);
     }
 
-    public GameManager(int numOpponents) {
+    private void updateOpponentList(){
+
+    }
+    public GameManager(int numOpponents, int gameNumber) {
+        this.gameNumber = gameNumber;
         this.MAX_PLAYER_SCORE = 5 * numOpponents; // There are 5 cells for each opponent's fort
         this.gameField = new Grid();
+        this.opponentScoresPerRound.add(null); //On round "0", no opponents have scored yet
         // Initialize the list of opponents
         this.opponentList = Stream.generate(EnemyFort::createNewPolyomino)
                 .limit(numOpponents)
@@ -43,6 +61,7 @@ public class GameManager {
         for (EnemyFort currentOpponent : this.opponentList) {
             gameField.placeOpponent(currentOpponent);
         }
+        currentRound = 1;
     }
 
     public int getMaxScore() {
@@ -56,14 +75,20 @@ public class GameManager {
     }
 
     // Determines who wins once the game ends
-    public String returnWinner() {
-        String gameOverMessage;
+    public boolean checkIfOpponentsWin() {
         if (this.totalOpponentScore >= this.MAX_OPPONENT_SCORE) {
-            gameOverMessage = "I'm sorry, your fort is all wet! They win!";
+            return true;
         } else {
-            gameOverMessage = "Congratulations! You won!";
+            return false;
         }
-        return gameOverMessage;
+    }
+
+    public boolean checkIfPlayerWins(){
+        if(this.playerScore >= this.MAX_PLAYER_SCORE){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public String retrieveGridStatus() {
@@ -82,10 +107,8 @@ public class GameManager {
     public String receiveCoordinate(String coordinate) {
         String hitStatus;
         int cellIsHit = this.gameField.registerHit(coordinate);
-
         boolean cellHitOnce = cellIsHit == 2;
         boolean hitIsMiss = cellIsHit == 0;
-
         if (hitIsMiss) {
             hitStatus = "Miss!";
         } else if (cellHitOnce) {
@@ -94,12 +117,12 @@ public class GameManager {
         } else {    //the cell at this coordinate was already hit, so the player does not get any score
             hitStatus = "HIT!";
         }
-
         //Since no fort shares a common cell, only the polyomino with the
         //coordinate will be affected
         this.opponentList.stream()
                 .forEach(opponent -> opponent.registerHit(coordinate));
         this.updateTotalScores();
+        currentRound++;
         return hitStatus;
     }
 
@@ -107,15 +130,35 @@ public class GameManager {
     public String getOpponentHits() {
         String OpponentsTurns = "";
         for (int i = 0; i < this.opponentList.size(); i++) {
-            EnemyFort opponent = this.opponentList.get(i);
-            OpponentsTurns += String.format("Opponent #%d of %d shot you for %d points!\n",
-                    i + 1, this.opponentList.size(), opponent.getScore());
+            EnemyFort currentOpponent = this.opponentList.get(i);
+            if(currentOpponent.getScore() != 0){
+                OpponentsTurns += String.format("Opponent #%d of %d shot you for %d points!\n",
+                        i + 1, this.opponentList.size(), currentOpponent.getScore());
+            }
         }
         return OpponentsTurns;
     }
 
+    public int getGameNumber(){
+        return gameNumber;
+    }
+
+    public long getNumActiveOpponents(){
+        return opponentList.stream()
+                .filter(enemyFort -> enemyFort.getScore() != 0)
+                .count();
+    }
+
     public String[][] receiveCellsStatus(){
         return gameField.retreiveCellStates();
+    }
+
+    public int getCurrentRound(){
+        return currentRound;
+    }
+
+    public int[] receiveRoundOpponentScores(int roundNumber){
+        return opponentScoresPerRound.get(roundNumber-1);
     }
 
 }

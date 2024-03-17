@@ -8,10 +8,12 @@ import java.util.List;
 public class GamesList {
 
     private final int NUM_OPPONENTS = 5;
+    private int currentGameNumber = 1;
     private List<GameManager> gamesStored = new ArrayList<>();
 
     public void addNewGame(){
-        GameManager newGame = new GameManager(NUM_OPPONENTS);
+        GameManager newGame = new GameManager(NUM_OPPONENTS, currentGameNumber);
+        currentGameNumber++;
         gamesStored.add(newGame);
     }
 
@@ -22,4 +24,5 @@ public class GamesList {
     public GameManager retreiveGame(int gameNumber){
         return gamesStored.get(gameNumber-1);
     }
+
 }

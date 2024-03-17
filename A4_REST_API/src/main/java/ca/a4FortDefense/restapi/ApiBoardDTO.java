@@ -16,7 +16,6 @@ public class ApiBoardDTO {
         this.boardWidth = boardWidth;
         this.boardHeight = boardHeight;
         cellStates = newGrid.retreiveCellStates();
-
     }
 
     public static ApiBoardDTO createApiBoard(int boardWidth, int boardHeight, Grid newGrid){

@@ -8,4 +8,14 @@ package ca.a4FortDefense.restapi;
 public class ApiLocationDTO {
     public int row;
     public int col;
+
+    public ApiLocationDTO(int row, int col){
+        this.row = row;
+        this.col = col;
+    }
+
+    public static ApiLocationDTO createApiLocationDTO(int row, int col){
+        ApiLocationDTO newLocation = new ApiLocationDTO(row, col);
+        return newLocation;
+    }
 }
