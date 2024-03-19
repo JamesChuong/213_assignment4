@@ -12,14 +12,14 @@ public class ApiBoardDTO {
     // celState[row]col] = {"fog", "hit", "fort", "miss", "field"}
     public String[][] cellStates;
 
-    public ApiBoardDTO(int boardWidth, int boardHeight, Grid newGrid){
-        this.boardWidth = boardWidth;
-        this.boardHeight = boardHeight;
+    public ApiBoardDTO(Grid newGrid){
+        this.boardWidth = newGrid.getWidth();
+        this.boardHeight = newGrid.getHeight();
         cellStates = newGrid.retreiveCellStates();
     }
 
-    public static ApiBoardDTO createApiBoard(int boardWidth, int boardHeight, Grid newGrid){
-        ApiBoardDTO newGameBoard = new ApiBoardDTO(boardWidth, boardHeight, newGrid);
+    public static ApiBoardDTO createApiBoard(Grid newGrid){
+        ApiBoardDTO newGameBoard = new ApiBoardDTO(newGrid);
         return newGameBoard;
     }
 }

@@ -18,21 +18,22 @@ public class EnemyFort implements ca.a4FortDefense.Model.Polyomino {
     private final int PLACE_BELOW = 2;
     private final int PLACE_LEFT = 3;
     private final int PLACE_RIGHT = 4;
-    private List<Map.Entry<Character, Integer>> fortCells;
-    private List<Map.Entry<Character, Integer>> damagedCells;
+    //A list of x-y coordinates which make up the enemy fort
+    private List<Map.Entry<Integer, Integer>> fortCells;
+    private List<Map.Entry<Integer, Integer>> damagedCells;
     private char identifier;
     private int numUndamagedCells;
 
     //Creates a random coordinate from a given starting coordinate
-    private Map.Entry<Character, Integer> createRandomCoordinate(Map.Entry<Character, Integer> startingCoordinate) {
-        Map.Entry<Character, Integer> newCell;
+    private Map.Entry<Integer, Integer> createRandomCoordinate(Map.Entry<Integer, Integer> startingCoordinate) {
+        Map.Entry<Integer, Integer> newCell;
         Random r = new Random();
         int randomDirection = r.nextInt(4) + 1;
         //Randomly select where the coordinate of the new block sits relative to the starting coordinate
         switch (randomDirection) {
             case PLACE_ABOVE:
                 newCell = new AbstractMap.SimpleEntry<>(startingCoordinate.getKey(),
-                        startingCoordinate.getValue() + 1);
+                        startingCoordinate.getValue()+1);
                 break;
             case PLACE_BELOW:
                 newCell = new AbstractMap.SimpleEntry<>(startingCoordinate.getKey(),
@@ -40,11 +41,11 @@ public class EnemyFort implements ca.a4FortDefense.Model.Polyomino {
                 break;
             case PLACE_LEFT:
                 newCell = new AbstractMap.SimpleEntry<>(
-                        (char) (startingCoordinate.getKey() - 1), startingCoordinate.getValue());
+                        (startingCoordinate.getKey() - 1), startingCoordinate.getValue());
                 break;
             case PLACE_RIGHT:
                 newCell = new AbstractMap.SimpleEntry<>(
-                        (char) (startingCoordinate.getKey() + 1), startingCoordinate.getValue());
+                        (startingCoordinate.getKey() + 1), startingCoordinate.getValue());
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + randomDirection);
@@ -53,8 +54,8 @@ public class EnemyFort implements ca.a4FortDefense.Model.Polyomino {
     }
 
     //Check if a coordinate is within the range of the grid
-    private boolean checkCoordinate(Map.Entry<Character, Integer> coor) {
-        boolean isWithinYAxis = coor.getKey() >= 'A' && coor.getKey() <= 'J';
+    private boolean checkCoordinate(Map.Entry<Integer, Integer> coor) {
+        boolean isWithinYAxis = coor.getKey() >= 0 && coor.getKey() <= 9;
         boolean isWithinXAxis = coor.getValue() >= 0 && coor.getValue() <= 9;
         return isWithinYAxis && isWithinXAxis;
     }
@@ -70,18 +71,16 @@ public class EnemyFort implements ca.a4FortDefense.Model.Polyomino {
     }
 
     @Override
-    public List<Map.Entry<Character, Integer>> getFortCells() {
+    public List<Map.Entry<Integer, Integer>> getFortCells() {
         return fortCells;
     }
 
     //Given a coordinate, determine if it belongs to this polyomino and if it has already been hit
     @Override
-    public void registerHit(String coordinate) {
-        String xCoor = coordinate.substring(1);
-        char yCoor = Character.toUpperCase(coordinate.charAt(0));
-        Map.Entry<Character, Integer> newXYCoor = new AbstractMap.SimpleEntry<>(yCoor, Integer.parseInt(xCoor) - 1);
+    public void registerHit(int row, int col) {
+        Map.Entry<Integer, Integer> newXYCoor = new AbstractMap.SimpleEntry<>(row, col);
         boolean isACell = false;
-        for (Map.Entry<Character, Integer> currentCoordinate : this.fortCells) {
+        for (Map.Entry<Integer, Integer> currentCoordinate : this.fortCells) {
             if (currentCoordinate.getKey() == newXYCoor.getKey()
                     && currentCoordinate.getValue() == newXYCoor.getValue()) {
                 isACell = true;
@@ -108,12 +107,10 @@ public class EnemyFort implements ca.a4FortDefense.Model.Polyomino {
     }
 
     @Override
-    public void createFortCells(int y, int x) {
-        List<Map.Entry<Character, Integer>> newFortCells = new ArrayList<>();
+    public void createFortCells(int x, int y) {
+        List<Map.Entry<Integer, Integer>> newFortCells = new ArrayList<>();
         //Create an initial random coordinate from which the rest of the fort is built upon
-        char yCoor = (char) ('A' + y);     //Randomly generate a value for the y-coordinate between A-J
-        int xCoor = x;  //Randomly generate a value of the x-coordinate between 0-9
-        Map.Entry<Character, Integer> startingCoordinate = new AbstractMap.SimpleEntry<>(yCoor, xCoor);
+        Map.Entry<Integer, Integer> startingCoordinate = new AbstractMap.SimpleEntry<>(x, y);
         newFortCells.add(startingCoordinate);
         //Generate 5 connected and non-overlapping coordinates that represent the shape of the fort
         Random r = new Random();
@@ -121,7 +118,7 @@ public class EnemyFort implements ca.a4FortDefense.Model.Polyomino {
             //Generate a random index to randomly choose a coordinate from which the next cell
             //is built from
             int randomIndex = r.nextInt(newFortCells.size());
-            Map.Entry<Character, Integer> newCell = createRandomCoordinate(newFortCells.get(randomIndex));
+            Map.Entry<Integer, Integer> newCell = createRandomCoordinate(newFortCells.get(randomIndex));
             boolean isWithinGrid = checkCoordinate(newCell);
             if (isWithinGrid) {
                 newFortCells.add(newCell);

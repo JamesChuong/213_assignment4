@@ -13,9 +13,9 @@ public class Cell {
     private String hitStatus; //How the cell is displayed. "~" initially, " " if it's a miss, and "X" if it's a hit
     private boolean isFortCell;
 
-    public Cell(int xInput, int yInput, char identifier, String displayStatus) {
-        this.X_COOR = xInput;
-        this.Y_COOR = yInput;
+    public Cell(int xCoor, int yCoor, char identifier, String displayStatus) {
+        this.X_COOR = xCoor;
+        this.Y_COOR = yCoor;
         this.identifier = identifier;
         this.hitStatus = displayStatus;
         this.isFortCell = false;

@@ -1,5 +1,7 @@
 package ca.a4FortDefense.Model;
 
+import ca.a4FortDefense.restapi.ApiBoardDTO;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -91,8 +93,8 @@ public class GameManager {
         }
     }
 
-    public String retrieveGridStatus() {
-        return this.gameField.toString(false);
+    public ApiBoardDTO retrieveGridStatus() {
+        return ApiBoardDTO.createApiBoard(gameField);
     }
 
     public String retrieveCheatGrid() {
@@ -104,9 +106,9 @@ public class GameManager {
         return this.totalOpponentScore;
     }
 
-    public String receiveCoordinate(String coordinate) {
+    public String receiveCoordinate(int row, int col) {
         String hitStatus;
-        int cellIsHit = this.gameField.registerHit(coordinate);
+        int cellIsHit = this.gameField.registerHit(row, col);
         boolean cellHitOnce = cellIsHit == 2;
         boolean hitIsMiss = cellIsHit == 0;
         if (hitIsMiss) {
@@ -120,7 +122,7 @@ public class GameManager {
         //Since no fort shares a common cell, only the polyomino with the
         //coordinate will be affected
         this.opponentList.stream()
-                .forEach(opponent -> opponent.registerHit(coordinate));
+                .forEach(opponent -> opponent.registerHit(row, col));
         this.updateTotalScores();
         currentRound++;
         return hitStatus;

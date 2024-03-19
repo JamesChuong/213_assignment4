@@ -77,10 +77,10 @@ public class Grid {
     // Returns true if the fort can be placed on the field, false otherwise
     private boolean canPlaceOpponents(Polyomino enemyFort) {
         // For every coordinate in the fort, determine if it is within the field and not already taken
-        for (Map.Entry<Character, Integer> coor : enemyFort.getFortCells()) {
-            int x = coor.getValue();
-            int y = coor.getKey() - 'A';
-            boolean isNotWithinGrid = x > this.NUM_COLUMNS - 1 || x < 0 || y > this.NUM_ROWS - 1 || y < 0;
+        for (Map.Entry<Integer, Integer> coor : enemyFort.getFortCells()) {
+            int x = coor.getKey();
+            int y = coor.getValue();
+            boolean isNotWithinGrid = (y > this.NUM_COLUMNS - 1 && y < 0) || (x > this.NUM_ROWS - 1 || x < 0);
             boolean coordinateAlreadyTaken = this.field.get(y).get(x).getIdentifier() != this.DEFAULT_IDENTIFIER;
             if (isNotWithinGrid || coordinateAlreadyTaken) {
                 return false;
@@ -92,13 +92,13 @@ public class Grid {
     //Creates a fort starting from the initial coordinates (startX, startY) and determines
     //if it can place it there or not
     //Returns true if it can, false otherwise
-    private boolean placePolyomino(Polyomino enemyFort, int startY, int startX) {
+    private boolean placePolyomino(Polyomino enemyFort, int startX, int startY) {
         //Generate a fort from the initial coordinate
-        enemyFort.createFortCells(startY, startX);
+        enemyFort.createFortCells(startX, startY);
         if (this.canPlaceOpponents(enemyFort)) {
-            for (Map.Entry<Character, Integer> coor : enemyFort.getFortCells()) {
-                int x = coor.getValue();
-                int y = coor.getKey() - 'A';
+            for (Map.Entry<Integer, Integer> coor : enemyFort.getFortCells()) {
+                int x = coor.getKey();
+                int y = coor.getValue();
                 //Mark every cell on the field at the coordinate of each part of the fort
                 //as belonging to it
                 Cell cell = this.field.get(y).get(x);
@@ -111,7 +111,7 @@ public class Grid {
     }
 
     private String findCellStatus(int x, int y){
-        Cell chosenCell = field.get(x).get(y);
+        Cell chosenCell = field.get(y).get(x);
         boolean cellIsAFort = chosenCell.getPlacedStatus();
         boolean cellIsHit = chosenCell.isHit();
         boolean cellUnknown = chosenCell.isFog();
@@ -140,11 +140,10 @@ public class Grid {
 
     //Track a hit on the grid to determine if it was a hit or a miss
     // Return 2 if both hit and not previously hit. Return 1 if hit and previously hit. Return 0 if it's a miss.
-    public int registerHit(String coordinate) {
-        Map.Entry<Integer, Integer> xyCoor = convertCoordinate(coordinate);
+    public int registerHit(int row, int col) {
         try {
-            Cell chosenCell = this.field.get(xyCoor.getValue() - 1)
-                    .get(xyCoor.getKey() - 1);
+            Cell chosenCell = this.field.get(col)
+                    .get(row);
             boolean isFortCell = chosenCell.getIdentifier() != this.DEFAULT_IDENTIFIER;
             boolean previouslyHit = chosenCell.getDamageStatus().equals("X");
             if (isFortCell && !previouslyHit) {
@@ -158,7 +157,7 @@ public class Grid {
                 return 0;
             }
         } catch (IndexOutOfBoundsException e) {
-            throw e;
+            throw new RuntimeException("Error: Coordinate out of bounds");
         }
     }
 
@@ -200,6 +199,14 @@ public class Grid {
             }
         }
         return cellStates;
+    }
+
+    public int getHeight(){
+        return NUM_COLUMNS;
+    }
+
+    public int getWidth(){
+        return NUM_ROWS;
     }
 
 

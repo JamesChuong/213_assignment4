@@ -17,7 +17,7 @@ public interface Polyomino {
     //of coordinates when given an initial starting coordinate
     public void createFortCells(int y, int x);
 
-    public List<Map.Entry<Character, Integer>> getFortCells();
+    public List<Map.Entry<Integer, Integer>> getFortCells();
 
     public char getIdentifier();
 
@@ -27,6 +27,6 @@ public interface Polyomino {
 
     //Given a coordinate, determine if it belongs to this polyomino and if it has already been hit, otherwise
     //update the number of undamaged cells
-    public void registerHit(String coordinate);
+    public void registerHit(int row, int col);
 
 }
