@@ -47,6 +47,7 @@ public class GameControllers {
 
     @GetMapping("/api/games")
     public List<ApiGameDTO> retreiveGameList(){
+        System.out.println("Loading game");
         List<ApiGameDTO> gameDTOList = new ArrayList<>();
         Iterator<GameManager> gameList = allGames.iterator();
         while(gameList.hasNext()){
@@ -58,19 +59,21 @@ public class GameControllers {
 
     @PostMapping("/api/games")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addNewGame(){
+    public ApiGameDTO addNewGame(){
+        System.out.println("Adding game");
         allGames.addNewGame(NUM_OPPONENTS);
+        return new ApiGameDTO(allGames.retreiveNewestGame());
     }
 
     @GetMapping("/api/games/{id}")
     public ApiGameDTO getGameByID(@PathVariable("id") int id){
         try{
+            System.out.println("Displaying game");
             GameManager chosenGame = allGames.retreiveGame(id);
             return ApiGameDTO.createNewGameDTO(chosenGame);
         } catch (IndexOutOfBoundsException e){
             throw new GameNotFoundException("Error: Game Not Found");
         }
-
     }
 
     //Board controllers
@@ -80,6 +83,7 @@ public class GameControllers {
         try{
             GameManager chosenGame = allGames.retreiveGame(id);
             ApiBoardDTO newBoard = new ApiBoardDTO(chosenGame.retreiveGrid());
+            System.out.println("Displaying board");
             return newBoard;
         } catch (IndexOutOfBoundsException e){
             throw new GameNotFoundException("Error: Game not found");
@@ -97,7 +101,7 @@ public class GameControllers {
         } catch (IndexOutOfBoundsException gameNotFound){
             throw new GameNotFoundException("Error: Game not found");
         } catch (RuntimeException outOfBoundsException){
-            throw new CoordinateOutOfBoundsException(outOfBoundsException.getMessage());
+            throw new CoordinateOutOfBoundsException("Error: Invalid coordinate");
         }
     }
 
@@ -108,6 +112,7 @@ public class GameControllers {
     public void activateCheatState(@PathVariable("id") int id, @RequestBody String SHOW_ALL){
         try{
             allGames.retreiveGame(id).activateCheats(SHOW_ALL);
+            System.out.println("Activating cheats");
         } catch (IndexOutOfBoundsException e){
             throw new GameNotFoundException("Error: Game not found");
         } catch (RuntimeException InvalidCheatString){

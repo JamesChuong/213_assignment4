@@ -22,6 +22,12 @@ public class GamesList implements Iterable<GameManager> {
         return gamesStored.get(index-1);
     }
 
+    public GameManager retreiveNewestGame(){
+        if(gamesStored.isEmpty()){
+            throw new RuntimeException("Error: No games created");
+        }
+        return gamesStored.get(gamesStored.size()-1);
+    }
     @Override
     public Iterator<GameManager> iterator() {
         return gamesStored.iterator();

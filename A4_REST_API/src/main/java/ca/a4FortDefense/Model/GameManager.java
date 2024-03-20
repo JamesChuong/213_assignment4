@@ -45,7 +45,6 @@ public class GameManager {
         this.gameNumber = gameNumber;
         this.MAX_PLAYER_SCORE = 5 * numOpponents; // There are 5 cells for each opponent's fort
         this.gameField = new Grid();
-        this.opponentScoresPerRound.add(null); //On round "0", no opponents have scored yet
         // Initialize the list of opponents
         this.opponentList = Stream.generate(EnemyFort::createNewPolyomino)
                 .limit(numOpponents)
