@@ -24,7 +24,6 @@ public class GameManager {
     private int totalOpponentScore = 0;
     private int playerScore = 0;
     private int gameNumber = 0;
-
     //The current round that is being played
     private int currentRound = 0;
 
@@ -42,9 +41,6 @@ public class GameManager {
         opponentScoresPerRound.add(endOfRoundScores);
     }
 
-    private void updateOpponentList(){
-
-    }
     public GameManager(int numOpponents, int gameNumber) {
         this.gameNumber = gameNumber;
         this.MAX_PLAYER_SCORE = 5 * numOpponents; // There are 5 cells for each opponent's fort
@@ -63,6 +59,7 @@ public class GameManager {
         for (EnemyFort currentOpponent : this.opponentList) {
             gameField.placeOpponent(currentOpponent);
         }
+        opponentScoresPerRound.add(new int[0]);
         currentRound = 1;
     }
 
@@ -77,24 +74,17 @@ public class GameManager {
     }
 
     // Determines who wins once the game ends
-    public boolean checkIfOpponentsWin() {
-        if (this.totalOpponentScore >= this.MAX_OPPONENT_SCORE) {
-            return true;
-        } else {
-            return false;
-        }
+
+    public Grid retreiveGrid(){
+        return gameField;
     }
 
-    public boolean checkIfPlayerWins(){
-        if(this.playerScore >= this.MAX_PLAYER_SCORE){
-            return true;
-        } else {
-            return false;
-        }
+    public void activateCheats(String cheatString){
+        gameField.activateCheatState(cheatString);
     }
 
-    public ApiBoardDTO retrieveGridStatus() {
-        return ApiBoardDTO.createApiBoard(gameField);
+    public void deactivateCheats(){
+        gameField.deactivateCheatState();
     }
 
     public String retrieveCheatGrid() {
@@ -102,9 +92,6 @@ public class GameManager {
     }
 
     // Return the total score for the opponents after one round
-    public int getRoundOpponentScore() {
-        return this.totalOpponentScore;
-    }
 
     public String receiveCoordinate(int row, int col) {
         String hitStatus;
@@ -141,8 +128,28 @@ public class GameManager {
         return OpponentsTurns;
     }
 
+    public boolean checkIfOpponentsWin() {
+        if (this.totalOpponentScore >= this.MAX_OPPONENT_SCORE) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean checkIfPlayerWins(){
+        if(this.playerScore >= this.MAX_PLAYER_SCORE){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public int getGameNumber(){
         return gameNumber;
+    }
+
+    public int getRoundOpponentScore() {
+        return this.totalOpponentScore;
     }
 
     public long getNumActiveOpponents(){
@@ -151,16 +158,12 @@ public class GameManager {
                 .count();
     }
 
-    public String[][] receiveCellsStatus(){
-        return gameField.retreiveCellStates();
-    }
-
     public int getCurrentRound(){
         return currentRound;
     }
 
     public int[] receiveRoundOpponentScores(int roundNumber){
-        return opponentScoresPerRound.get(roundNumber-1);
+        return opponentScoresPerRound.get(roundNumber);
     }
 
 }

@@ -17,7 +17,8 @@ public class Grid {
     private final char DEFAULT_IDENTIFIER = '!';
     private final int NUM_ROWS = 10;
     private final int NUM_COLUMNS = 10;
-
+    //If true, no fog is shown on the grid and all forts are seen, false otherwise
+    private boolean cheatStateOn = false;
     private List<List<Cell>> field;
 
 
@@ -110,26 +111,40 @@ public class Grid {
         return false;
     }
 
+    //Given an (x,y) coordinate on the grid, return its visible state (hit, miss, fog, fort, etc.)
+    //If cheats are enabled, then return its actual state/identity
     private String findCellStatus(int x, int y){
         Cell chosenCell = field.get(y).get(x);
         boolean cellIsAFort = chosenCell.getPlacedStatus();
         boolean cellIsHit = chosenCell.isHit();
         boolean cellUnknown = chosenCell.isFog();
-        if(cellUnknown){
+        //If cheats are enabled, then no fog should be present
+        if(cellUnknown && !cheatStateOn){
             return "fog";
         } else if(cellIsAFort && cellIsHit){
             return "hit";
         } else if (!cellIsAFort && cellIsHit){
             return "miss";
-        } else if (cellIsAFort && !cellIsHit){
+        } else if (cellIsAFort && (!cellIsHit || cheatStateOn)){   //If cheats are enabled, then always show the fort
             return "fort";
-        } else {
+        } else {    //The cell is neither a fort or hit
             return "field";
         }
     }
 
     public Grid() {
         field = createGrid();
+    }
+
+    public void activateCheatState(String cheatString){
+        if(cheatString != "SHOW_ALL"){
+            throw new RuntimeException("Error: Invalid cheat string");
+        }
+        this.cheatStateOn = true;
+    }
+
+    public void deactivateCheatState(){
+        this.cheatStateOn = false;
     }
 
     public void placeOpponent(Polyomino enemyFort) {

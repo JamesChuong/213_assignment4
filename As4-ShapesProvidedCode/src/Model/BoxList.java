@@ -59,7 +59,6 @@ public class BoxList implements ShapeList {
                             , jsonShapeObject.get("fill").getAsString(), jsonShapeObject.get("fillText").getAsString())
                 );
 
-
             }
         } catch (FileNotFoundException e){
             e.printStackTrace();

@@ -14,12 +14,12 @@ public class GamesList implements Iterable<GameManager> {
 
     public void addNewGame(int numOpponents){
         GameManager newGame = new GameManager(numOpponents, currentGameNumber);
-        currentGameNumber++;
         gamesStored.add(newGame);
+        currentGameNumber++;
     }
 
-    public GameManager retreiveGame(int gameNumber){
-        return gamesStored.get(gameNumber-1);
+    public GameManager retreiveGame(int index){
+        return gamesStored.get(index-1);
     }
 
     @Override

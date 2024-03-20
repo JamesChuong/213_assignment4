@@ -16,6 +16,7 @@ public class GameControllers {
     private final int NUM_OPPONENTS = 5;
     private GamesList allGames = new GamesList();
 
+    //Error handlers
     @ResponseStatus(HttpStatus.NOT_FOUND)
     static class GameNotFoundException extends RuntimeException{
         public GameNotFoundException(String msg){
@@ -30,7 +31,21 @@ public class GameControllers {
         }
     }
 
-    @GetMapping("/games")
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    static class InvalidRequestException extends RuntimeException{
+        public InvalidRequestException(String msg){
+            super(msg);
+        }
+    }
+
+    @GetMapping("/api/about")
+    String returnName(){
+        return "James Chuong";
+    }
+
+    //Game controllers
+
+    @GetMapping("/api/games")
     public List<ApiGameDTO> retreiveGameList(){
         List<ApiGameDTO> gameDTOList = new ArrayList<>();
         Iterator<GameManager> gameList = allGames.iterator();
@@ -41,13 +56,13 @@ public class GameControllers {
         return gameDTOList;
     }
 
-    @PostMapping("/games")
+    @PostMapping("/api/games")
     @ResponseStatus(HttpStatus.CREATED)
     public void addNewGame(){
         allGames.addNewGame(NUM_OPPONENTS);
     }
 
-    @GetMapping("/games/{id}")
+    @GetMapping("/api/games/{id}")
     public ApiGameDTO getGameByID(@PathVariable("id") int id){
         try{
             GameManager chosenGame = allGames.retreiveGame(id);
@@ -58,18 +73,22 @@ public class GameControllers {
 
     }
 
-    @GetMapping("/games/{id}/board")
+    //Board controllers
+
+    @GetMapping("/api/games/{id}/board")
     public ApiBoardDTO getBoardStatus(@PathVariable("id") int id){
         try{
             GameManager chosenGame = allGames.retreiveGame(id);
-            ApiBoardDTO newBoard = chosenGame.retrieveGridStatus();
+            ApiBoardDTO newBoard = new ApiBoardDTO(chosenGame.retreiveGrid());
             return newBoard;
         } catch (IndexOutOfBoundsException e){
             throw new GameNotFoundException("Error: Game not found");
         }
     }
 
-    @PostMapping("/games/{id}/moves")
+    //Move controllers
+
+    @PostMapping("/api/games/{id}/moves")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void trackHit(@PathVariable("id") int id, @RequestBody ApiLocationDTO locationDTO){
         try{
@@ -82,8 +101,18 @@ public class GameControllers {
         }
     }
 
-    @PostMapping("/games/{id}/cheatstate")
-    public void activateCheatState(@PathVariable("id") int id, @RequestBody boolean SHOW_ALL){
-        GameManager chosenGame = allGames.retreiveGame(id);
+    //Cheatstate controller
+
+    @PostMapping("/api/games/{id}/cheatstate")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void activateCheatState(@PathVariable("id") int id, @RequestBody String SHOW_ALL){
+        try{
+            allGames.retreiveGame(id).activateCheats(SHOW_ALL);
+        } catch (IndexOutOfBoundsException e){
+            throw new GameNotFoundException("Error: Game not found");
+        } catch (RuntimeException InvalidCheatString){
+            throw new InvalidRequestException("Error: Invalid cheat string");
+        }
+
     }
 }
