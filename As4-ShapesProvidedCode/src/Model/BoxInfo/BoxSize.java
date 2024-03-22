@@ -1,4 +1,4 @@
-package Model;
+package Model.BoxInfo;
 
 public class BoxSize {
 

@@ -1,4 +1,4 @@
-package Model;
+package Model.BoxInfo;
 
 import ca.cmpt213.as4.UI.Canvas;
 

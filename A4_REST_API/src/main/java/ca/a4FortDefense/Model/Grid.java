@@ -137,7 +137,7 @@ public class Grid {
     }
 
     public void activateCheatState(String cheatString){
-        if(cheatString != "SHOW_ALL"){
+        if(!cheatString.equals( "SHOW_ALL")){
             throw new RuntimeException("Error: Invalid cheat string");
         }
         this.cheatStateOn = true;

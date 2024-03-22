@@ -1,4 +1,4 @@
-package Model;
+package Model.BoxInfo;
 
 import Model.ShapeInfo.ShapeBorder;
 import ca.cmpt213.as4.UI.Canvas;

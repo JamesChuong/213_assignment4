@@ -1,5 +1,6 @@
 package Model;
 
+import Model.BoxInfo.BoxList;
 import Model.ShapeInfo.ShapeBorder;
 import Model.ShapeInfo.ShapeColor;
 import Model.ShapeInfo.ShapeList;

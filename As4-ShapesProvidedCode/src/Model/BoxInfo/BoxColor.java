@@ -1,4 +1,4 @@
-package Model;
+package Model.BoxInfo;
 
 import Model.ShapeInfo.ShapeColor;
 import ca.cmpt213.as4.UI.Canvas;
@@ -13,12 +13,7 @@ public class BoxColor implements ShapeColor {
 
     public BoxColor(String background, String backgroundColor){
         this.background = background;
-        try {
-            Field field = Class.forName("java.awt.Color").getField(backgroundColor);
-            this.backgroundColor = (Color)field.get(null);
-        } catch (Exception e) {
-            this.backgroundColor = null; // Not defined
-        }
+        this.backgroundColor = parseColorName(backgroundColor);
         //System.out.println(this.backgroundColor.toString());
     }
 
@@ -31,6 +26,29 @@ public class BoxColor implements ShapeColor {
         } else if (background.equals("triangle")){
             colorTriangle(canvas, startX, startY, width, height);
         }
+    }
+
+    //Converts a string with the name of a color to an actual color object
+    private Color parseColorName(String backgroundColor){
+        String colorName = backgroundColor.toLowerCase();
+        //If there is a space between words (e.g, 'light gray'), then remove the space,
+        //capitalize the second half of the word, and join them together to form a single word (e.g, 'lightGray')
+        for(int currentCharacter = 0; currentCharacter < colorName.length(); currentCharacter++){
+            if(colorName.charAt(currentCharacter) == ' '){
+                String firstCharOfSecondHalf = colorName.substring(currentCharacter+1,currentCharacter+2).toUpperCase();
+                String secondHalf = colorName.substring(currentCharacter+2);
+                String firstHalf = colorName.substring(0, currentCharacter);
+                colorName = firstHalf + firstCharOfSecondHalf + secondHalf;
+            }
+        }
+        //Code borrowed from https://stackoverflow.com/questions/2854043/converting-a-string-to-color-in-java
+        try {
+            Field field = Class.forName("java.awt.Color").getField(colorName);
+            return  (Color)field.get(null);
+        } catch (Exception e) {
+            return null; // Not defined
+        }
+
     }
 
     private void colorLine(Canvas canvas, int startX, int startY, int width, int offSet, int currentLine){

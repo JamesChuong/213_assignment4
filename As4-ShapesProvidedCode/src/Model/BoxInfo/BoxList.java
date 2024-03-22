@@ -1,4 +1,4 @@
-package Model;
+package Model.BoxInfo;
 
 import Model.ShapeInfo.ShapeBorder;
 import Model.ShapeInfo.ShapeColor;
@@ -51,7 +51,7 @@ public class BoxList implements ShapeList {
                 } else {
                     lineChar = ' ';
                 }
-                newShapeList.add( new Model.BoxShape(jsonShapeObject.get("top").getAsInt()
+                newShapeList.add( new BoxShape(jsonShapeObject.get("top").getAsInt()
                             , jsonShapeObject.get("left").getAsInt(), jsonShapeObject.get("width").getAsInt()
                             , jsonShapeObject.get("height").getAsInt(), jsonShapeObject.get("background").getAsString()
                             , jsonShapeObject.get("backgroundColor").getAsString()
