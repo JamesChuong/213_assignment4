@@ -17,6 +17,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * The BoxList class implements methods declared in the ShapeList interface.
+ * It contains a list of BoxShape classes. This class is used in the model to
+ * support the operations needed, like drawing each shape or creating the
+ * list from a JSON file.
+ */
 public class BoxList implements ShapeList {
 
     private List<BoxShape> shapes = new ArrayList<>();
@@ -46,11 +52,13 @@ public class BoxList implements ShapeList {
             char lineChar;
             for (JsonElement currentShape: jsonlistOfShapes){
                 JsonObject jsonShapeObject = currentShape.getAsJsonObject();
+                //Since the lineChar field is optional, check if it's there
                 if(jsonShapeObject.has("lineChar")){
                     lineChar = jsonShapeObject.get("lineChar").getAsCharacter();
                 } else {
-                    lineChar = ' ';
+                    lineChar = ' ';     //Empty field, will not be used in the BoxShape object
                 }
+                //Create a new box from the current fields in the JSON file and add it to the list
                 newShapeList.add( new BoxShape(jsonShapeObject.get("top").getAsInt()
                             , jsonShapeObject.get("left").getAsInt(), jsonShapeObject.get("width").getAsInt()
                             , jsonShapeObject.get("height").getAsInt(), jsonShapeObject.get("background").getAsString()
@@ -58,7 +66,6 @@ public class BoxList implements ShapeList {
                             , jsonShapeObject.get("line").getAsString(), lineChar
                             , jsonShapeObject.get("fill").getAsString(), jsonShapeObject.get("fillText").getAsString())
                 );
-
             }
         } catch (FileNotFoundException e){
             e.printStackTrace();

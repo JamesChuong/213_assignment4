@@ -4,6 +4,13 @@ import Model.ShapeInfo.*;
 import ca.cmpt213.as4.UI.Canvas;
 import ca.cmpt213.as4.UI.DrawableShape;
 
+/**
+ * The BoxShape class implements the methods from the DrawableShape interface.
+ * It contains all the attributes a box can have, but each one is encapsulated with
+ * its respective interface.This means each operation this class needs is composed
+ * of a series of operations for each field.
+ */
+
 public class BoxShape implements DrawableShape {
 
     private ShapeBorder border;
@@ -22,7 +29,7 @@ public class BoxShape implements DrawableShape {
     }
     @Override
     public void draw(Canvas canvas) {
-        color.placeColor(canvas, position.getLeft(),position.getTop(), size.getWidth(), size.getHeight());
+        color.drawColor(canvas, position.getLeft(),position.getTop(), size.getWidth(), size.getHeight());
         border.drawBorder(canvas, position.getLeft(), position.getTop(), size.getWidth(), size.getHeight());
         text.placeText(canvas, position.getTop()+1, position.getLeft()+1
                 , size.getHeight()-2, size.getWidth()-2);
