@@ -7,6 +7,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * Each game that is created on the webapp is an instance of the GameManager class in the
+ * backend, the GamesList class stores each one in a list and contains methods for retrieval
+ * and adding a new game
+ */
 public class GamesList implements Iterable<GameManager> {
 
     private int currentGameNumber = 1;

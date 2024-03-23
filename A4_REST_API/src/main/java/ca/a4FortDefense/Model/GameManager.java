@@ -62,17 +62,6 @@ public class GameManager {
         currentRound = 1;
     }
 
-    public int getMaxScore() {
-        return this.MAX_OPPONENT_SCORE;
-    }
-
-    // Checks whether the game has ended or not, does not specify who wins
-    public boolean checkStateOfGame() {
-        return this.totalOpponentScore >= this.MAX_OPPONENT_SCORE
-                || this.playerScore >= this.MAX_PLAYER_SCORE;
-    }
-
-    // Determines who wins once the game ends
 
     public Grid retreiveGrid(){
         return gameField;
@@ -86,11 +75,6 @@ public class GameManager {
         gameField.deactivateCheatState();
     }
 
-    public String retrieveCheatGrid() {
-        return this.gameField.toString(true);
-    }
-
-    // Return the total score for the opponents after one round
 
     public String receiveCoordinate(int row, int col) {
         String hitStatus;

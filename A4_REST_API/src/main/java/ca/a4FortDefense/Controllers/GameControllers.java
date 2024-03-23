@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * The GameControllers class contains all the endpoints for the REST API, and supports all requests
+ * made to the server when playing the game.
+ */
 @RestController
 public class GameControllers {
 
